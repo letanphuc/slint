@@ -26,6 +26,14 @@ foo bar
 
 Meaning that there must be an error on the line above spanning `bar`, as indicated by the `>` and `<` arrows.
 
+Each suggestion of the diagnostic is a `suggestion{…}` line after it, spanning the code that the suggestion replaces:
+
+```ignore
+    widht: 10px;
+//  >   <error{Unknown property widht. Did you mean 'width'?}
+//  >   <suggestion{width}
+```
+
 Ideally, each error message must be tested like so.
 
 The syntax test can be run alone with
