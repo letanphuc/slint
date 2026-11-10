@@ -131,6 +131,14 @@ pub struct CompilerConfiguration {
     /// Whether to use SDF when pre-rendering fonts.
     #[cfg(all(feature = "renderer-software", feature = "sdf-fonts"))]
     pub use_sdf_fonts: bool,
+    /// Additional characters to pre-render when embedding glyphs for the software renderer.
+    ///
+    /// By default only ASCII and the characters found in string literals and bundled
+    /// translations are embedded. Text that is only known at run time (for example text
+    /// received from the network) may contain other characters, which must be listed here.
+    /// Initialized from the `SLINT_EMBED_CHARS` environment variable.
+    #[cfg(feature = "renderer-software")]
+    pub embed_characters: String,
     /// The compiler will look in these paths for components used in the file to compile.
     pub include_paths: Vec<std::path::PathBuf>,
     /// The compiler will look in these paths for library imports.
@@ -318,6 +326,8 @@ impl CompilerConfiguration {
             components_to_generate: ComponentSelection::ExportedWindows,
             #[cfg(all(feature = "renderer-software", feature = "sdf-fonts"))]
             use_sdf_fonts: false,
+            #[cfg(feature = "renderer-software")]
+            embed_characters: std::env::var("SLINT_EMBED_CHARS").unwrap_or_default(),
             #[cfg(feature = "bundle-translations")]
             translation_path_bundle: std::env::var("SLINT_BUNDLE_TRANSLATIONS")
                 .ok()

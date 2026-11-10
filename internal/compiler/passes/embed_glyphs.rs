@@ -133,6 +133,7 @@ pub fn embed_glyphs(
             .chain(std::iter::once('●'))
             .chain(std::iter::once('…')),
     );
+    characters_seen.extend(compiler_config.embed_characters.chars().filter(|c| !c.is_control()));
 
     if let Ok(sizes_str) = std::env::var("SLINT_FONT_SIZES") {
         for custom_size_str in sizes_str.split(',') {

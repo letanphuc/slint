@@ -280,6 +280,25 @@ impl CompilerConfiguration {
         Self { config }
     }
 
+    /// Pre-render glyphs for these characters, in addition to the ones the compiler finds in the
+    /// `.slint` files.
+    ///
+    /// This flag only takes effect when `embed_resources` is set to [`EmbedResourcesKind::EmbedForSoftwareRenderer`].
+    ///
+    /// The software renderer can only draw characters whose glyphs were embedded at compile time.
+    /// By default these are ASCII and the characters used in string literals and bundled
+    /// translations. Use this for text that is only known at run time, for example
+    /// `with_embedded_characters("àáảãạăằắẳẵặâầấẩẫậđ…")` for Vietnamese text received from a server.
+    ///
+    /// Characters are added to the ones set by the `SLINT_EMBED_CHARS` environment variable.
+    #[cfg(feature = "renderer-software")]
+    #[must_use]
+    pub fn with_embedded_characters(self, characters: impl AsRef<str>) -> Self {
+        let mut config = self.config;
+        config.embed_characters.push_str(characters.as_ref());
+        Self { config }
+    }
+
     /// Converts any relative include_paths or library_paths to absolute paths relative to the manifest_dir.
     #[must_use]
     fn with_absolute_paths(self, manifest_dir: &std::path::Path) -> Self {

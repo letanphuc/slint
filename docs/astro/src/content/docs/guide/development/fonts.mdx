@@ -52,6 +52,14 @@ sizes your `.slint` files use. If some font sizes are only known at run time, se
 sizes (for example `SLINT_FONT_SIZES=12,16,24`) so glyphs are pre-rendered at those sizes as
 well.
 
+Glyphs are only pre-rendered for ASCII and for the characters that appear in string literals of
+your `.slint` files and in bundled translations. Text that is only known at run time, for example
+names or messages received from the network, may use other characters, which are then not drawn.
+List those characters with
+<LangRefLink lang="rust-slint-build" relpath="struct.CompilerConfiguration.html#method.with_embedded_characters">`CompilerConfiguration::with_embedded_characters()`</LangRefLink> (Rust) or the
+`SLINT_EMBED_CHARS` environment variable at compile time (for example
+`SLINT_EMBED_CHARS="àáảãạđ"`).
+
 To reduce the binary size on systems with limited flash memory, glyphs can be embedded as
 [Signed Distance Fields (SDF)](https://en.wikipedia.org/wiki/Signed_distance_function) instead
 of pre-rendered bitmaps, trading some rendering quality for a smaller footprint. Enable it with
